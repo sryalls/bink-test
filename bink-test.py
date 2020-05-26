@@ -27,7 +27,18 @@ parser.add_argument('-i', '--lease-inclusive',
 parser.add_argument('-t', '--tenants',
                     help='Total masts per tenant', action='store_true')
 
-parser.print_help()
-
 if __name__ == '__main__':
-    pass
+
+    options = parser.parse_args()
+    if options.rent:
+        pass
+    if options.rent_digest:
+        pass
+    if options.lease_25:
+        pass
+    if options.lease_inclusive:
+        pass
+    if options.tenants:
+        pass
+    if True not in (vars(options)).values():
+        parser.print_help()
