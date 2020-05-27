@@ -43,6 +43,10 @@ if __name__ == '__main__':
     if options.lease_inclusive:
         pass
     if options.tenants:
-        pass
+        tenants = masts.get_masts_by_tenant()
+        tenants = tenants.items()
+        tenants = sorted(tenants)
+        for tenant in tenants:
+            print(f'{tenant[0]}\nmasts: {tenant[1]}\n')
     if True not in (vars(options)).values():
         parser.print_help()

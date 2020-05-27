@@ -5,11 +5,10 @@ class Mast(object):
 
     def __init__(self, name, address, tenant, lease_start,
                  lease_end, duration, rent):
-        tenant.replace(" ", "")
-        tenant.replace(".", "")
-        self.name = name.upper()
-        self.address = address.upper()
-        self.tenant = tenant.upper()
+
+        self.name = name
+        self.address = address
+        self.tenant = tenant
         self.lease_start = lease_start
         self.leas_end = lease_end
         self.duration = duration
@@ -38,3 +37,11 @@ class MastSet(object):
                 )
                 masts.append(mast)
         return masts
+
+    def get_masts_by_tenant(self):
+        tenants = {}
+        for mast in self.masts:
+            if mast.tenant not in tenants.keys():
+                tenants[mast.tenant] = 0
+            tenants[mast.tenant] += 1
+        return tenants
