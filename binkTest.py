@@ -1,4 +1,5 @@
 import argparse
+from mast.mast import MastSet
 
 # setting up command line options
 parser = argparse.ArgumentParser(prog='bink-test',
@@ -26,6 +27,9 @@ parser.add_argument('-i', '--lease-inclusive',
 
 parser.add_argument('-t', '--tenants',
                     help='Total masts per tenant', action='store_true')
+
+# loading mast data
+masts = MastSet()
 
 if __name__ == '__main__':
 
