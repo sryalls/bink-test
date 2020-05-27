@@ -2,7 +2,7 @@ import argparse
 
 # setting up command line options
 parser = argparse.ArgumentParser(prog='bink-test',
-                                 usage='python bink-test.py [option]')
+                                 usage='python binkTest.py [option]')
 
 parser.add_argument('-r', '--rent', help='Ascending list of rent values',
                     action='store_true')
