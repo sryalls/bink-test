@@ -1,11 +1,46 @@
 import csv
+tenant_misspellings = {'HUTCHISON': 'HUTCHISON',
+                       'HUTCHINSON': 'HUTCHISON',
+                       'HUTCHSION': 'HUTCHISON',
+                       'HUTCHISON3GUKLTD': 'HUTCHISON3GUK',
+                       'HUTCHISON3GLTD': 'HUTCHISON3GUK'
+                       } # Arqiva and Arqiva services not included because they
+                         # could be different companies
+
+tenant_pretty = {
+    'ARQIVASERVICESLTD': 'Arqiva Services Ltd',
+    'ARQIVALTD': 'Arqiva Ltd',
+    'VODAFONELTD': 'Vodafone Ltd',
+    'O2(UK)LTD': 'O2 (UK) Ltd',
+    'EVERYTHINGEVERYWHERELTDHUTCHISON3GUK':
+        'Everything Everywhere Ltd & Hutchison 3G Ltd',
+    'EVERYTHINGEVERYWHERELTD': 'Everything Everywhere Ltd',
+    'CORNERSTONETELECOMMUNICATIONSINFRASTRUCTURE':
+        'Cornerstone Telecommunications Infrastructure'
+}
+
+
+def _clean_tenant(tenant):
+    tenant = tenant.replace(' ', '')
+    tenant = tenant.replace('.', '')
+    for variant in tenant_misspellings.keys():
+        tenant = tenant.replace(variant, tenant_misspellings[variant])
+
+    parties = tenant.split('&')
+    if len(parties) > 1:
+        parties.sort()
+        tenant = ''.join(parties)
+
+    for variant in tenant_pretty:
+        tenant = tenant.replace(variant, tenant_pretty[variant])
+    return tenant
 
 
 class Mast(object):
 
     def __init__(self, name, address, tenant, lease_start,
                  lease_end, duration, rent):
-
+        tenant = _clean_tenant(tenant.upper())
         self.name = name
         self.address = address
         self.tenant = tenant
