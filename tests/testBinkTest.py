@@ -22,7 +22,7 @@ def test_rent(capfd):
     call(['python', 'binkTest.py', '-r'])
     captured = capfd.readouterr()
     assert captured.out[0:34] == 'Potternewton Crescent - Arqiva Ltd'
-    assert len(captured.out) == 3148
+    assert len(captured.out) == 3190
     assert captured.out[-9:-1] == "28327.09"
 
 
@@ -35,7 +35,7 @@ def test_rent_digest(capfd):
     call(['python', 'binkTest.py', '-d'])
     captured = capfd.readouterr()
     assert captured.out[0:34] == 'Potternewton Crescent - Arqiva Ltd'
-    assert len(captured.out) == 302
+    assert len(captured.out) == 307
     assert captured.out[-8:-1] == "12750.0"
 
 
@@ -45,8 +45,15 @@ def test_lease_25():
 
 
 # test lease-25-rent
-def test_lease_25_rent():
-    pass
+def test_lease_25_rent(capfd):
+    """
+    Test that the 'Get by Lease Length' functionality works as expected
+    """
+    call(['python', 'binkTest.py', '-f'])
+    captured = capfd.readouterr()
+    assert captured.out[0:31] == 'Seacroft Gate (Chase) - Block 2'
+    assert len(captured.out) == 926
+    assert captured.out[-8:-1] == "46500.0"
 
 
 # test lease-inclusive
