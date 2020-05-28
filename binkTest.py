@@ -31,18 +31,32 @@ parser.add_argument('-t', '--tenants',
 # loading mast data
 masts = MastSet()
 
+
+def _rent_output(masts):
+    for mast in masts:
+        print(f'{mast.name} - {mast.tenant}\nrent: {mast.rent}')
+
+
 if __name__ == '__main__':
 
     options = parser.parse_args()
     if options.rent:
-        pass
+        masts = masts.order_by_rent()
+        _rent_output(masts)
+
     if options.rent_digest:
-        pass
+        masts = masts.order_by_rent(5)
+        _rent_output(masts)
+
     if options.lease_25:
         pass
     if options.lease_inclusive:
         pass
     if options.tenants:
-        pass
+        tenants = masts.get_masts_by_tenant()
+        tenants = tenants.items()
+        tenants = sorted(tenants)
+        for tenant in tenants:
+            print(f'{tenant[0]}\nmasts: {tenant[1]}\n')
     if True not in (vars(options)).values():
         parser.print_help()
