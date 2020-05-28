@@ -34,7 +34,7 @@ masts = MastSet()
 
 def _rent_output(masts):
     for mast in masts:
-        print(f'{mast.name} - {mast.tenant}\nrent: {mast.rent}')
+        print(f'{mast.name} - {mast.tenant}\nrent: £{mast.rent}')
 
 
 if __name__ == '__main__':
@@ -49,7 +49,17 @@ if __name__ == '__main__':
         _rent_output(masts)
 
     if options.lease_25:
-        pass
+        masts = masts.get_masts_by_lease_length()
+        rent_total = 0
+        for mast in masts:
+            print(f'{mast.name}\n{mast.address}')
+            print(f'Tenant: {mast.tenant}')
+            print(f'Lease Start: {mast.lease_start}')
+            print(f'Lease End: {mast.lease_end}')
+            print(f'Lease Duration: {mast.duration} years')
+            print(f'Rent: £{str(mast.rent)}\n----------\n')
+            rent_total += mast.rent
+        print(f'Total Value of leases: £{rent_total}')
     if options.lease_inclusive:
         pass
     if options.tenants:
