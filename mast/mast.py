@@ -47,7 +47,7 @@ class Mast(object):
         self.lease_start = lease_start
         self.leas_end = lease_end
         self.duration = duration
-        self.rent = rent
+        self.rent = float(rent)
 
 
 class MastSet(object):
@@ -80,3 +80,10 @@ class MastSet(object):
                 tenants[mast.tenant] = 0
             tenants[mast.tenant] += 1
         return tenants
+
+    def order_by_rent(self, limit=None):
+        self.masts = sorted(self.masts, key=lambda i: i.rent)
+        if limit:
+            return self.masts[0:limit]
+        return self.masts
+

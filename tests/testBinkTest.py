@@ -14,13 +14,29 @@ def test_no_args(capfd):
 
 
 # test rent
-def test_rent():
-    pass
+def test_rent(capfd):
+    """
+    Test that the 'Order by Rent' functionality works as expected
+    """
+
+    call(['python', 'binkTest.py', '-r'])
+    captured = capfd.readouterr()
+    assert captured.out[0:34] == 'Potternewton Crescent - Arqiva Ltd'
+    assert len(captured.out) == 3148
+    assert captured.out[-9:-1] == "28327.09"
 
 
 # test rent-digest
-def test_rent_digest():
-    pass
+def test_rent_digest(capfd):
+    """
+    Test that the 'Order by Rent' functionality works as expected when limited
+    to five results
+    """
+    call(['python', 'binkTest.py', '-d'])
+    captured = capfd.readouterr()
+    assert captured.out[0:34] == 'Potternewton Crescent - Arqiva Ltd'
+    assert len(captured.out) == 302
+    assert captured.out[-8:-1] == "12750.0"
 
 
 # test lease-25
