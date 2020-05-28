@@ -1,15 +1,49 @@
 import csv
+tenant_misspellings = {'HUTCHISON': 'HUTCHISON',
+                       'HUTCHINSON': 'HUTCHISON',
+                       'HUTCHSION': 'HUTCHISON',
+                       'HUTCHISON3GUKLTD': 'HUTCHISON3GUK',
+                       'HUTCHISON3GLTD': 'HUTCHISON3GUK'
+                       } # Arqiva and Arqiva services not included because they
+                         # could be different companies
+
+tenant_pretty = {
+    'ARQIVASERVICESLTD': 'Arqiva Services Ltd',
+    'ARQIVALTD': 'Arqiva Ltd',
+    'VODAFONELTD': 'Vodafone Ltd',
+    'O2(UK)LTD': 'O2 (UK) Ltd',
+    'EVERYTHINGEVERYWHERELTDHUTCHISON3GUK':
+        'Everything Everywhere Ltd & Hutchison 3G Ltd',
+    'EVERYTHINGEVERYWHERELTD': 'Everything Everywhere Ltd',
+    'CORNERSTONETELECOMMUNICATIONSINFRASTRUCTURE':
+        'Cornerstone Telecommunications Infrastructure'
+}
+
+
+def _clean_tenant(tenant):
+    tenant = tenant.replace(' ', '')
+    tenant = tenant.replace('.', '')
+    for variant in tenant_misspellings.keys():
+        tenant = tenant.replace(variant, tenant_misspellings[variant])
+
+    parties = tenant.split('&')
+    if len(parties) > 1:
+        parties.sort()
+        tenant = ''.join(parties)
+
+    for variant in tenant_pretty:
+        tenant = tenant.replace(variant, tenant_pretty[variant])
+    return tenant
 
 
 class Mast(object):
 
     def __init__(self, name, address, tenant, lease_start,
                  lease_end, duration, rent):
-        tenant.replace(" ", "")
-        tenant.replace(".", "")
-        self.name = name.upper()
-        self.address = address.upper()
-        self.tenant = tenant.upper()
+        tenant = _clean_tenant(tenant.upper())
+        self.name = name
+        self.address = address
+        self.tenant = tenant
         self.lease_start = lease_start
         self.leas_end = lease_end
         self.duration = duration
@@ -38,3 +72,11 @@ class MastSet(object):
                 )
                 masts.append(mast)
         return masts
+
+    def get_masts_by_tenant(self):
+        tenants = {}
+        for mast in self.masts:
+            if mast.tenant not in tenants.keys():
+                tenants[mast.tenant] = 0
+            tenants[mast.tenant] += 1
+        return tenants

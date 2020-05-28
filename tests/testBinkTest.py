@@ -39,5 +39,15 @@ def test_lease_inclusive():
 
 
 # test tenants
-def test_tenants():
-    pass
+def test_tenants(capfd):
+    """
+    Test that the 'get masts by tenant' functionality outputs the expected
+    result
+    """
+
+    call(['python', 'binkTest.py', '-t'])
+    captured = capfd.readouterr()
+    assert captured.out[0:10] == 'Arqiva Ltd'
+    assert len(captured.out) == 245
+    assert captured.out[-10:-1] == "masts: 2\n"
+
