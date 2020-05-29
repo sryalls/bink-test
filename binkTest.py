@@ -35,11 +35,20 @@ masts = MastSet()
 
 
 def _rent_output(masts_subset):
+    """
+    Format output for rent sorted list
+
+    :param masts_subset:
+    """
     for mast in masts_subset:
         print(f'{mast.name} - {mast.tenant}\nrent: £{mast.rent}')
 
 
 def _lease_output(masts_subset):
+    """
+    Format output for lease based select.
+    :param masts_subset:
+    """
     rent_total = 0
     for mast in masts_subset:
         print(f'{mast.name}\n{mast.address}')

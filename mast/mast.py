@@ -25,6 +25,12 @@ tenant_pretty = {
 
 
 def _clean_tenant(tenant):
+    """
+    Clean variances from the input tenant string.
+
+    :param tenant:
+    :return: str
+    """
     tenant = tenant.replace(' ', '')
     tenant = tenant.replace('.', '')
     for variant in tenant_misspellings.keys():
@@ -41,9 +47,23 @@ def _clean_tenant(tenant):
 
 
 class Mast(object):
+    """
+    Contains the data for a single rented mast
+    """
 
     def __init__(self, name, address, tenant, lease_start,
                  lease_end, duration, rent):
+        """
+        Constructor
+
+        :param name:
+        :param address:
+        :param tenant:
+        :param lease_start:
+        :param lease_end:
+        :param duration:
+        :param rent:
+        """
         tenant = _clean_tenant(tenant.upper())
         self.name = name
         self.address = address
@@ -55,10 +75,22 @@ class Mast(object):
 
 
 class MastSet(object):
+    """
+    Holds the set of rented masts
+    """
     def __init__(self):
+        """
+        Constructor. Reads the mast set from csv file.
+        """
         self.masts = self.load_from_csv('PythonDeveloperTestDataset.csv')
 
     def load_from_csv(self, file_location):
+        """
+        From a file location, return a list of loaded masts.
+
+        :param file_location:
+        :return: list
+        """
         masts = []
         with open(file_location, mode='r') as infile:
             reader = csv.reader(infile)
@@ -78,6 +110,12 @@ class MastSet(object):
         return masts
 
     def get_masts_by_tenant(self):
+        """
+        From the stored list of all masts, return the count of all masts for
+        each tenant.
+
+        :return: dict
+        """
         tenants = {}
         for mast in self.masts:
             if mast.tenant not in tenants.keys():
@@ -86,12 +124,26 @@ class MastSet(object):
         return tenants
 
     def order_by_rent(self, limit=None):
+        """
+        From the stored list of all masts, return a list of all masts sorted by
+        rent value
+
+        :param limit:
+        :return: list
+        """
         self.masts = sorted(self.masts, key=lambda i: i.rent)
         if limit:
             return self.masts[0:limit]
         return self.masts
 
     def get_masts_by_lease_length(self, lease=25):
+        """
+        From the stored list of all masts, return a list of all masts with a
+        given lease length.
+
+        :param lease:
+        :return: list
+        """
         selected_masts = []
         for mast in self.masts:
             if mast.duration == lease:
@@ -101,6 +153,14 @@ class MastSet(object):
     def get_masts_by_lease_start(self,
                                  open_date='01 Jun 1999',
                                  close_date='31 Aug 2007'):
+        """
+        From the stored list of all masts, return a list of all masts with a
+        lease start date between two given dates.
+
+        :param open_date:
+        :param close_date:
+        :return: list
+        """
         selected_masts = []
         for mast in self.masts:
             if datetime.strptime(open_date, '%d %b %Y') <= \
