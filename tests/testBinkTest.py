@@ -52,13 +52,22 @@ def test_lease_25_rent(capfd):
     call(['python', 'binkTest.py', '-f'])
     captured = capfd.readouterr()
     assert captured.out[0:31] == 'Seacroft Gate (Chase) - Block 2'
-    assert len(captured.out) == 926
+    assert len(captured.out) == 918
     assert captured.out[-8:-1] == "46500.0"
 
 
 # test lease-inclusive
-def test_lease_inclusive():
-    pass
+def test_lease_inclusive(capfd):
+    """
+    Test that the 'Get by Lease Start' functionality outputs the expected
+    result
+    """
+    call(['python', 'binkTest.py', '-i'])
+    captured = capfd.readouterr()
+    assert captured.out[0:21] == 'Potternewton Crescent'
+    assert len(captured.out) == 1124
+    assert captured.out[-8:-1] == "53100.0"
+
 
 
 # test tenants
