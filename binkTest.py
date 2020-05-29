@@ -1,5 +1,7 @@
-import argparse
+from datetime import datetime
 from mast.mast import MastSet
+
+import argparse
 
 # setting up command line options
 parser = argparse.ArgumentParser(prog='bink-test',
@@ -32,26 +34,43 @@ parser.add_argument('-t', '--tenants',
 masts = MastSet()
 
 
-def _rent_output(masts):
-    for mast in masts:
-        print(f'{mast.name} - {mast.tenant}\nrent: {mast.rent}')
+def _rent_output(masts_subset):
+    for mast in masts_subset:
+        print(f'{mast.name} - {mast.tenant}\nrent: £{mast.rent}')
+
+
+def _lease_output(masts_subset):
+    rent_total = 0
+    for mast in masts_subset:
+        print(f'{mast.name}\n{mast.address}')
+        print(f'Tenant: {mast.tenant}')
+        print(f'Lease Start: {mast.lease_start.strftime("%d/%m/%Y")}')
+        print(f'Lease End: {mast.lease_end.strftime("%d/%m/%Y")}')
+        print(f'Lease Duration: {mast.duration} years')
+        print(f'Rent: £{str(mast.rent)}\n----------\n')
+        rent_total += mast.rent
+    print(f'Total Value of leases: £{rent_total}')
 
 
 if __name__ == '__main__':
 
     options = parser.parse_args()
     if options.rent:
-        masts = masts.order_by_rent()
-        _rent_output(masts)
+        masts_subset = masts.order_by_rent()
+        _rent_output(masts_subset)
 
     if options.rent_digest:
-        masts = masts.order_by_rent(5)
-        _rent_output(masts)
+        masts_subset = masts.order_by_rent(5)
+        _rent_output(masts_subset)
 
     if options.lease_25:
-        pass
+        masts_subset = masts.get_masts_by_lease_length()
+        _lease_output(masts_subset)
+
     if options.lease_inclusive:
-        pass
+        masts_subset = masts.get_masts_by_lease_start()
+        _lease_output(masts_subset)
+
     if options.tenants:
         tenants = masts.get_masts_by_tenant()
         tenants = tenants.items()

@@ -1,4 +1,8 @@
+from datetime import datetime
+
 import csv
+
+
 tenant_misspellings = {'HUTCHISON': 'HUTCHISON',
                        'HUTCHINSON': 'HUTCHISON',
                        'HUTCHSION': 'HUTCHISON',
@@ -44,9 +48,9 @@ class Mast(object):
         self.name = name
         self.address = address
         self.tenant = tenant
-        self.lease_start = lease_start
-        self.leas_end = lease_end
-        self.duration = duration
+        self.lease_start = datetime.strptime(lease_start, '%d %b %Y')
+        self.lease_end = datetime.strptime(lease_end, '%d %b %Y')
+        self.duration = int(duration)
         self.rent = float(rent)
 
 
@@ -87,3 +91,21 @@ class MastSet(object):
             return self.masts[0:limit]
         return self.masts
 
+    def get_masts_by_lease_length(self, lease=25):
+        selected_masts = []
+        for mast in self.masts:
+            if mast.duration == lease:
+                selected_masts.append(mast)
+        return selected_masts
+
+    def get_masts_by_lease_start(self,
+                                 open_date='01 Jun 1999',
+                                 close_date='31 Aug 2007'):
+        selected_masts = []
+        for mast in self.masts:
+            if datetime.strptime(open_date, '%d %b %Y') <= \
+                    mast.lease_start <= datetime.strptime(close_date,
+                                                          '%d %b %Y'):
+                selected_masts.append(mast)
+
+        return selected_masts
